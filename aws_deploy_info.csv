@@ -1,0 +1,2 @@
+Platform,InsatnaceName,vmName,vmSize,sshKeyFile,storage size
+AWS,AWS-01-AmazonLinuxAMI1,ami-0e2ff28bfb72a4e45,t2.micro,testkey,6

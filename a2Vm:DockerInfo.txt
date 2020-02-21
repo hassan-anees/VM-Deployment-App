@@ -1,0 +1,38 @@
+Required VM's and docker images
+
+---------
+AWS
+-----------
+At the demo you could be asked for any of the first 5 Free-Tier Linux VMs.
+
+Amazon Linux 2 AMI (HVM), SSD Volume Type - 
+ami-0a887e401f7654935 (VM name/ImageId)
+t2.micro (VM size/InstanceType)
+<anyname> (Instance Name/TagSpecifications=[...Tags..])
+
+
+
+
+
+
+
+Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type ami-0e2ff28bfb72a4e45
+
+Red Hat Enterprise Linux 8 (HVM), SSD Volume Type
+ami-0c322300a1dd5dc79
+
+SUSE Linux Enterprise Server 15 SP1 (HVM), SSD Volume Type
+ami-0df6cfabfbe4385b7
+
+Ubuntu Server 18.04 LTS (HVM), SSD Volume Type - 
+ami-07ebfd5b3428b6f4d 
+-------------
+Azure
+------------
+Here are the VMs that could be requested from Azure: Ubuntu Server 16.04 LTS, Red Hat Enterprise Linux 7.4, and 
+Debian 10 "Buster".
+
+---------------
+Docker images
+-------------
+You may be asked to install some of the following images: golang, gcc, swift, and julia from Docker Hub.

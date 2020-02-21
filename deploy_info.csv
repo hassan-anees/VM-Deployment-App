@@ -1,0 +1,5 @@
+Platform,InsatnaceName,vmName,vmSize,sshKeyFile
+AWS,AWS-01-AmazonLinuxAMI1,ami-0e2ff28bfb72a4e45,t2.micro,MyKeyPair
+AWS,AWS-01-UbuntuLTS,ami-07ebfd5b3428b6f4d,t2.micro,key1
+AWS,AWS-01-RedHatLinux8,ami-0c322300a1dd5dc79,t2.micro,key2
+Azure,Azure-01-UbuntuLTS,UbuntuLTS,Basic_A0,key4

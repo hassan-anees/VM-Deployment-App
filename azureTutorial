@@ -1,0 +1,94 @@
+/*
+to create a vm you need to use "az vm create"
+
+Sub-command|	Description
+create	   | Create a new virtual machine
+deallocate | Deallocate a virtual machine
+delete	   | Delete a virtual machine
+list	   | List the created virtual machines in your subscription
+open-port  | Open a specific network port for inbound traffic
+restart	   | Restart a virtual machine
+show	   | Get the details for a virtual machine
+start	   | Start a stopped virtual machine
+stop	   | Stop a running virtual machine
+update	   | Update a property of a virtual machine
+*/
+
+
+/* CREATING VM *******************
+When you create a vm you NEED atleast 4 images 
+
+Parameter	            Description
+--resource-group	    The resource group that will own the virtual machine, use learn-d8ff3edb-a658-4cbd-9513-f06d638b6118.
+--name	                The name of the virtual machine - must be unique within the resource group.
+--image	                The operating system image to use to create the VM.
+--location	            The region to place the VM in. Typically this would be close to the consumer of the VM. In this exercise, choose a location nearby from the following list.
+Note: You can add the --verbose flag "az vm create --verbose" to showcase feedback
+Note you can also add the --no-wait flag which will put the creation of the VM in the background (useful in a script) 
+
+...
+once you run the the following:
+'
+az vm create \
+    --resource-group learn-d8ff3edb-a658-4cbd-9513-f06d638b6118 \
+    --name SampleVM2 \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --generate-ssh-keys \
+    --verbose \
+    --size "Standard_DS5_v2"   #this basically sets what
+'
+You will get a json return
+
+
+*/
+
+
+/*LISTING VM images ******************
+normal list
+    az vm list
+you can also list within a specific resource group 
+    az vm list --resource
+or in a table (this is what you want) 
+    az vm list --output table
+
+*/
+
+/*GETTING VMS IP ADDRESS 
+    az vm list-ip-addresses -n <NameYouGaveVM> -o table
+^ this lists a table with the IP address 
+Below can give you ONLY public ip 
+ az vm show -d -g RESOURCEGROUPNAME -n VMNAME --query publicIps -o tsv
+
+
+/*STARTING AND STOPPING A VM 
+    az vm stop \
+    --name SampleVM \
+    --resource-group learn-d8ff3edb-a658-4cbd-9513-f06d638b6118
+name is the name of the vm and resource group is what holds the vm..?
+
+
+/*INSTALL SOFTWARE 
+you ssh into the vm
+    az vm list-ip-addresses --name SampleVM --output table
+OR
+    az vm show -d -g RESOURCEGROUPNAME -n VMNAME --query publicIps -o tsv
+
+then
+    ssh azureuser@<PublicIPAddress>
+then to install things like nginx example
+    sudo apt-get -y update && sudo apt-get -y install nginx
+if that doesn't work then you might need to open port 
+    az vm open-port \
+        --port 80 \
+        --resource-group learn-bfbb3811-766f-4a76-8436-5cc7336255c7 \
+        --name SampleVM
+
+
+---
+az vm create \ --resource-group vms \ --location canadacentral \ --name cli-1 \
+--image UbuntuLTS \ --admin-username azureuser \ --generate-ssh-keys \ --verbose
+
+
+
+

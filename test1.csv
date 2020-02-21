@@ -1,0 +1,3 @@
+Platform,Instance Name,VM Name,VM Size,Storage Size
+aws,aws-01-AmazonLinuxAMI,name1,98,80
+aws, s,name2,23,22
