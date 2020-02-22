@@ -11,11 +11,6 @@ t2.micro (VM size/InstanceType)
 <anyname> (Instance Name/TagSpecifications=[...Tags..])
 
 
-
-
-
-
-
 Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type ami-0e2ff28bfb72a4e45
 
 Red Hat Enterprise Linux 8 (HVM), SSD Volume Type
