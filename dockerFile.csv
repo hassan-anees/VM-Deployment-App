@@ -1,2 +1,3 @@
 InstanaceName,Docker Image Name,Registry,Background (Y or N)
-Linux-2-AMI,hellocloud,dastacey,N
+5UbuntuLTS,hellocloud,dastacey,N
+1AmazonLinux2,hellocloud,dastacey,N

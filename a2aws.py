@@ -81,6 +81,7 @@ def createVM(vmObj):
     print('key ({})'.format(vmObj.sshkey))
     print('stroage ({})'.format(vmObj.storageSpace))
 
+
     ####NEED TO SAY print for storage
 
     if vmObj.sshkey == '':
@@ -96,7 +97,7 @@ def createVM(vmObj):
 
 
     instances = ec2.create_instances(
-        BlockDeviceMappings=[{"DeviceName": "/dev/xvda","Ebs" : { "VolumeSize" : 10 }}],
+        BlockDeviceMappings=[{"DeviceName": "/dev/xvda","Ebs" : { "VolumeSize" : int(vmObj.storageSpace) }}],
         ImageId = vmObj.vmName, #VM NAME
         MinCount=1,
         MaxCount=1,
@@ -213,6 +214,10 @@ def sshConnection():
         #name = get_instance_name(instance)
         #print(name) 
 
+    #######################################
+    #REMOVE THIS FOR DEBUGGING, ONLY NEED THIS WHEN YOU initialize vm
+    #######################################
+    time.sleep(15.0)
 
                 #print(instance.tags['Name'])
     instances = ec2.instances.filter(
@@ -221,6 +226,8 @@ def sshConnection():
     #going through every instance running on the cloud
     for instance in instances:
         #another loop going through the dockerObj list 
+        print('docker image running')
+        print(instance.id, instance.instance_type, instance.image_id, instance.public_ip_address, instance.vpc_id, instance.key_name, instance.tags)
 
         for dockerObj in dockerObjectList:
 
@@ -262,40 +269,84 @@ def sshConnection():
                 #sudo.. blah blah BACKGROUND DOCIMAGE
                 pullString = 'sudo docker pull {}'.format(docImage)
                 runString = 'sudo docker run {} {}'.format(background, docImage)
-                print(runString)
+                #print(runString)
             
                 try:
                     #make this dynamic later. like pull the key that an instance uses through some command
                 # i think you do instance.key_name
                     time.sleep(1.2)
-                    key = paramiko.RSAKey.from_private_key_file('key1.pem')
+                    key = paramiko.RSAKey.from_private_key_file(instance.key_name + '.pem')
+                    print('got pem stuff')
                     client = paramiko.SSHClient()
+                    print('got client')
                     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                    print('got client host keys')
 
-                    user = 'ec2-user'
+
+                    if instance.image_id == 'ami-07ebfd5b3428b6f4d':
+                        user = 'ubuntu'
+                    else:
+                        user = 'ec2-user'
 
                     #here put the dns, or up of it
                     #make sure to also do a if else to check if a image_id is ubuntu. If it is then change ubuntu.
-                    client.connect(instance.public_dns_name, username=user,pkey=key)
+                    client.connect(instance.public_ip_address, username=user,pkey=key)
+                    print('make connection')
+
+                    print('-----------------------')
                     run_command('ls -a', client)
+                    print('-----------------------')
+                    ##linux 2 and linux ami
+                    if instance.image_id == 'ami-0a887e401f7654935' or instance.image == 'ami-0a887e401f7654935':
+                        run_command('sudo yum install -y docker', client)
+                        run_command('sudo service docker start', client)
+                        run_command('sudo usermod -a -G docker ec2-user', client)
+                        run_command(pullString, client)
+                        run_command(runString, client)
+
+                    #red hat stuff
+                    if instance.image_id == 'ami-0c322300a1dd5dc79':
+                        run_command('sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo', client)
+                        run_command('sudo dnf repolist -v', client)
+                        run_command('sudo dnf -y install docker-ce-3:18.09.1-3.el7', client)
+                        run_command('sudo dnf -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm', client)
+                        run_command('sudo systemctl start docker', client)
+                        run_command('sudo systemctl enable docker', client)
+
+                        run_command(pullString, client)
+                        run_command(runString, client)
+                    #SUSE linux
+                    if instance.image_id == 'ami-0df6cfabfbe4385b7':
+                        run_command('sudo service docker start', client)
+                        run_command('sudo usermod -a -G docker ec2-user', client)
+                        run_command(pullString, client)
+                        run_command(runString, client)
+                    #ubuntu
+                    if instance.image_id == 'ami-07ebfd5b3428b6f4d':
+                        run_command('sudo apt-get update', client)
+                        run_command('sudo apt -y install docker.io', client)
+                        run_command('sudo systemctl start docker', client)
+
+                        run_command(pullString, client)
+                        run_command(runString, client)
 
                     
-                    run_command('sudo yum install -y docker', client)
-                    run_command('sudo service docker start', client)
-                    run_command('sudo usermod -a -G docker {}'.format(user), client)
-                    run_command(pullString, client)
-                    run_command(runString, client)
-                    #run_command('sudo docker run hello-world', client)
                     
-                    #run_command('docker pull dastacey/hellocloud', client)
-                    #run_command('sudo docker run dastacey/hellocloud', client)
+            
 
+
+                    # run_command('sudo yum install -y docker', client)
+                    # run_command('sudo service docker start', client)
+                    # run_command('sudo usermod -a -G docker {}'.format(user), client)
+
+
+                    # run_command(pullString, client)
+                    # run_command(runString, client)
 
                     #print('testing4, got key')
                     client.close()
                 except Exception as e:
                     print(e)
-                    client.close()
 
 def fileReaderDocker(filename):
 
@@ -316,7 +367,7 @@ def fileReaderDocker(filename):
 ###########
 
 def main():
-    #fileReader('test_deploy_info.csv')
+    fileReader('deploy_info.csv')
     #listVM()
     fileReaderDocker('dockerFile.csv')
     sshConnection()

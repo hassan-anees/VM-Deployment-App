@@ -1,0 +1,54 @@
+1AWS,1AmazonLinux2,ami-0a887e401f7654935,t2.micro,key1,8
+works with the normal config 
+
+run_command('sudo yum install -y docker', client)
+run_command('sudo service docker start', client)
+run_command('sudo usermod -a -G docker {}'.format(user), client)
+sudo docker pull dastacey/hellocloud
+sudo docker run --rm dastacey/hellocloud
+
+AWS,2AmazonLinuxAMI,ami-0e2ff28bfb72a4e45,t2.micro,key1,8
+works with normal config
+
+run_command('sudo yum install -y docker', client)
+run_command('sudo service docker start', client)
+run_command('sudo usermod -a -G docker {}'.format(user), client)
+sudo docker pull dastacey/hellocloud
+sudo docker run --rm dastacey/hellocloud
+
+AWS,3RedHat,ami-0c322300a1dd5dc79,t2.micro,key1,8
+REDHAT HAS SOME PROBLEMS, go to this link to figure out later 
+https://linuxconfig.org/how-to-install-docker-in-rhel-8
+
+sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf repolist -v
+sudo dnf -y install docker-ce-3:18.09.1-3.el7
+sudo dnf -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo docker pull dastacey/hellocloud
+sudo docker run --rm dastacey/hellocloud
+
+sudo docker pull hello-cloud
+sudo docker run --rm hello-cloud
+
+AWS,4SUSE,ami-0df6cfabfbe4385b7,t2.micro,key1,8
+DOCKER IS ALREADY INSTALLED! yay, don't need to install docker
+
+run_command('sudo service docker start', client)
+run_command('sudo usermod -a -G docker {}'.format(user), client)
+sudo docker pull dastacey/hellocloud
+sudo docker run --rm dastacey/hellocloud
+
+AWS,5UbuntuLTS,ami-07ebfd5b3428b6f4d,t2.micro,key1,8
+here instead of ec2-user, use ubuntu
+
+sudo apt-get update
+sudo apt -y install docker.io
+(you need type in yes to install so send command 'y')
+sudo systemctl start docker
+sudo docker pull dastacey/hellocloud
+sudo docker run --rm dastacey/hellocloud
+
+
+
