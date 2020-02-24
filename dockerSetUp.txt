@@ -45,7 +45,6 @@ here instead of ec2-user, use ubuntu
 
 sudo apt-get update
 sudo apt -y install docker.io
-(you need type in yes to install so send command 'y')
 sudo systemctl start docker
 sudo docker pull dastacey/hellocloud
 sudo docker run --rm dastacey/hellocloud

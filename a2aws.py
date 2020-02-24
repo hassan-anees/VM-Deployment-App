@@ -131,65 +131,13 @@ def listVM():
 
 ################
 
-def run_command(command, ssh_client):
-    #print('run command')
+def vmBashCommand(command, ssh_client):
     stdin, stdout, stderr = ssh_client.exec_command(command)
     stdin.flush()
     data = stdout.read().splitlines()
-    #print('run command')
     for line in data:
-        #print('run command')
-        x = line.decode()
-        #print(line.decode())
-        #print('\n\ntest')
-        print(x, line)
-
-
-# def sshConnection():
-#     for instance in ec2.instances.all():
-#         print(instance.id, instance.instance_type, instance.state)
-#         for instance in ec2.instances.all():
-#             print(instance.id, instance.instance_type, instance.state)
-    
-#             try:
-#                 key = paramiko.RSAKey.from_private_key_file("key1.pem")
-#                 client = paramiko.SSHClient()
-#                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-#                 client.connect(instance.public_dns_name,username='ec2-user',pkey=key)
-        
-#                 run_command('sudo yum install -y docker', client)
-#                 run_command('sudo service docker start', client)
-#                 run_command('sudo usermod -a -G docker ec2-user', client)
-#                 run_command('sudo docker run hello-world', client)
-#                 client.close()
-#             except Exception as e:
-#                 print(e)
-#                 client.close()
-
-###
-
-
-#ena stuff. remove later
-# #####
-# for instance in instances:
-#     print(instance.id, instance.instance_type, instance.state)
-#     for instance in instances:
-#         print(instance.id, instance.instance_type, instance.state)
-
-#         try:
-#             key = paramiko.RSAKey.from_private_key_file("./ena-keyPair.cer")
-#             client = paramiko.SSHClient()
-#             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-#             client.connect(instance.public_dns_name,username='ec2-user',pkey=key)
-    
-#             run_command('sudo yum install -y docker', client)
-#             run_command('sudo service docker start', client)
-#             run_command('sudo usermod -a -G docker ec2-user', client)
-#             run_command('sudo docker run hello-world', client)
-    
-#     client.close()
-
-##
+        string = line.decode()
+        print(string)
 
 
 def get_instance_name(instance):
@@ -210,14 +158,22 @@ def sshConnection():
     for instance in instances:
         print(instance.id, instance.instance_type, instance.image_id, instance.public_ip_address, instance.vpc_id, instance.key_name, instance.tags)
         print('waiting until its ready')
+        #instance.wait_until_running()
         instance.wait_until_running()
+        while(True):
+            #print("Checking for Instance Status before SSH")
+            status_desc = ec2_client.describe_instance_status(InstanceIds=[instance.id])
+            status = status_desc['InstanceStatuses'][0]
+            if status['InstanceStatus']['Status'] == 'ok' and status['SystemStatus']['Status'] == 'ok':
+                print("\nInstance Ready to SSH\n")
+                break
         #name = get_instance_name(instance)
         #print(name) 
 
     #######################################
     #REMOVE THIS FOR DEBUGGING, ONLY NEED THIS WHEN YOU initialize vm
     #######################################
-    time.sleep(15.0)
+    #time.sleep(30.0)
 
                 #print(instance.tags['Name'])
     instances = ec2.instances.filter(
@@ -291,59 +247,48 @@ def sshConnection():
                     #here put the dns, or up of it
                     #make sure to also do a if else to check if a image_id is ubuntu. If it is then change ubuntu.
                     client.connect(instance.public_ip_address, username=user,pkey=key)
-                    print('make connection')
+                    print('made connection')
 
+                    #Remove this later, this is ls -a is just a test
                     print('-----------------------')
-                    run_command('ls -a', client)
+                    vmBashCommand('ls -a', client)
                     print('-----------------------')
+
                     ##linux 2 and linux ami
-                    if instance.image_id == 'ami-0a887e401f7654935' or instance.image == 'ami-0a887e401f7654935':
-                        run_command('sudo yum install -y docker', client)
-                        run_command('sudo service docker start', client)
-                        run_command('sudo usermod -a -G docker ec2-user', client)
-                        run_command(pullString, client)
-                        run_command(runString, client)
+                    if instance.image_id == 'ami-0a887e401f7654935' or instance.image_id == 'ami-0e2ff28bfb72a4e45':
+                        vmBashCommand('sudo yum install -y docker', client)
+                        vmBashCommand('sudo service docker start', client)
+                        vmBashCommand('sudo usermod -a -G docker ec2-user', client)
+                        vmBashCommand(pullString, client)
+                        vmBashCommand(runString, client)
 
                     #red hat stuff
                     if instance.image_id == 'ami-0c322300a1dd5dc79':
-                        run_command('sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo', client)
-                        run_command('sudo dnf repolist -v', client)
-                        run_command('sudo dnf -y install docker-ce-3:18.09.1-3.el7', client)
-                        run_command('sudo dnf -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm', client)
-                        run_command('sudo systemctl start docker', client)
-                        run_command('sudo systemctl enable docker', client)
+                        vmBashCommand('sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo', client)
+                        vmBashCommand('sudo dnf repolist -v', client)
+                        vmBashCommand('sudo dnf -y install docker-ce-3:18.09.1-3.el7', client)
+                        vmBashCommand('sudo dnf -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm', client)
+                        vmBashCommand('sudo systemctl start docker', client)
+                        vmBashCommand('sudo systemctl enable docker', client)
 
-                        run_command(pullString, client)
-                        run_command(runString, client)
+                        vmBashCommand(pullString, client)
+                        vmBashCommand(runString, client)
                     #SUSE linux
                     if instance.image_id == 'ami-0df6cfabfbe4385b7':
-                        run_command('sudo service docker start', client)
-                        run_command('sudo usermod -a -G docker ec2-user', client)
-                        run_command(pullString, client)
-                        run_command(runString, client)
+                        vmBashCommand('sudo service docker start', client)
+                        vmBashCommand('sudo usermod -a -G docker ec2-user', client)
+                        vmBashCommand(pullString, client)
+                        vmBashCommand(runString, client)
                     #ubuntu
-                    if instance.image_id == 'ami-07ebfd5b3428b6f4d':
-                        run_command('sudo apt-get update', client)
-                        run_command('sudo apt -y install docker.io', client)
-                        run_command('sudo systemctl start docker', client)
+                    if instance.image_id == 'ami-07ebfd5b3428b6f4d' or instance.image_id == 'ami-0400a1104d5b9caa1':
+                        vmBashCommand('sudo apt-get update', client)
+                        vmBashCommand('sudo apt -y install docker.io', client)
+                        vmBashCommand('sudo systemctl start docker', client)
 
-                        run_command(pullString, client)
-                        run_command(runString, client)
+                        vmBashCommand(pullString, client)
+                        vmBashCommand(runString, client)
 
                     
-                    
-            
-
-
-                    # run_command('sudo yum install -y docker', client)
-                    # run_command('sudo service docker start', client)
-                    # run_command('sudo usermod -a -G docker {}'.format(user), client)
-
-
-                    # run_command(pullString, client)
-                    # run_command(runString, client)
-
-                    #print('testing4, got key')
                     client.close()
                 except Exception as e:
                     print(e)

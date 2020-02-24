@@ -1,3 +1,6 @@
 Platform,InsatnaceName,vmName,vmSize,sshKeyFile,storage size
-AWS,1AmazonLinux2,ami-0a887e401f7654935,t2.micro,key1,8
-AWS,5UbuntuLTS,ami-07ebfd5b3428b6f4d,t2.micro,key1,8
+AWS,111AmazonLinux2,ami-0a887e401f7654935,t2.micro,key1,8
+AWS,222AmazonLinuxAMI,ami-0e2ff28bfb72a4e45,t2.micro,key1,8
+AWS,333RedHat,ami-0c322300a1dd5dc79,t2.micro,key1,8
+AWS,444SUSE,ami-0df6cfabfbe4385b7,t2.micro,key1,8
+AWS,555UbuntuLTS,ami-07ebfd5b3428b6f4d,t2.micro,key1,8
