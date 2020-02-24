@@ -3,7 +3,7 @@ works with the normal config
 
 run_command('sudo yum install -y docker', client)
 run_command('sudo service docker start', client)
-run_command('sudo usermod -a -G docker {}'.format(user), client)
+run_command('sudo usermod -a -G docker ec2-user', client)
 sudo docker pull dastacey/hellocloud
 sudo docker run --rm dastacey/hellocloud
 
@@ -12,7 +12,7 @@ works with normal config
 
 run_command('sudo yum install -y docker', client)
 run_command('sudo service docker start', client)
-run_command('sudo usermod -a -G docker {}'.format(user), client)
+run_command('sudo usermod -a -G docker ec2-user', client)
 sudo docker pull dastacey/hellocloud
 sudo docker run --rm dastacey/hellocloud
 
@@ -41,7 +41,6 @@ sudo docker pull dastacey/hellocloud
 sudo docker run --rm dastacey/hellocloud
 
 AWS,5UbuntuLTS,ami-07ebfd5b3428b6f4d,t2.micro,key1,8
-here instead of ec2-user, use ubuntu
 
 sudo apt-get update
 sudo apt -y install docker.io

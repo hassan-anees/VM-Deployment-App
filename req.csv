@@ -1,3 +1,0 @@
-﻿Platform,Instance Name,VM Name,VM Size,Storage Size,admin-user,admin-pass
-AWS,aws-1,ami-thin,t2.micro,8,NA,NA
-Azure,az-1,,,,,

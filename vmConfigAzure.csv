@@ -1,0 +1,2 @@
+platform,name,os,size,sshkey
+Azure,m3,Debian:debian-10-daily:10-gen2:0.20200222.178,Standard_A1_v2,az_key.pub

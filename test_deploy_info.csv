@@ -1,3 +1,0 @@
-Platform,InstanaceName,vmName,vmSize,sshKeyFile,storage size
-AWS,Linux-2-AMI,ami-0a887e401f7654935,t2.micro,key1,8
-AWS,Linux-2-AMI,ami-0a887e401f7654935,t2.micro,key1,8
