@@ -1,6 +1,5 @@
 InstanaceName,Docker Image Name,Registry,Background (Y or N)
-111AmazonLinux2,gcc,library,Y
-222AmazonLinuxAMI,swift,library,Y
-333RedHat,julia,library,Y
-444SUSE,hellocloud,dastacey,N
+222AmazonLinuxAMI,gcc,library,Y
+222AmazonLinuxAMI,golang,library,Y
+555UbuntuLTS,gcc,library,Y
 555UbuntuLTS,golang,library,Y
