@@ -7,6 +7,7 @@ redhat="RHEL"
 #ubuntu="cognosys:ubuntu-1604-lts:ubuntu-16-04-lts:1.2019.0711"
 ubuntu="Canonical:UbuntuServer:16.04-LTS:latest"
 
+#ubuntu 
 docker1(){
     echo "$1 is the ip"
     ssh -o "StrictHostKeyChecking no" -n $1 sudo apt-get update

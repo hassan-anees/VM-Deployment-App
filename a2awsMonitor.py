@@ -80,6 +80,7 @@ def sshConnection():
 
         print('--------------------------------------------------')
         print('DOCKER at IP ({})'.format(instance.public_ip_address))
+        print('ID ({})'.format(instance.image_id))
         print('--------------------------------------------------')        
         itr = itr + 1
         

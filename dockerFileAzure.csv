@@ -1,5 +1,5 @@
 InstanaceName,Docker Image Name,Registry,Background (Y or N)
 vm1,julia,library,Y
 vm1,swift,library,Y
-vm1,julia,library,Y
+vm2,julia,library,Y
 vm2,swift,library,Y
